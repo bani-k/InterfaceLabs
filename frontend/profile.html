@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - Interface Labs</title>
+  <link rel="icon" type="image/x-icon" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #root { height: 100%; width: 100%; }
+    body { font-family: 'Stack Sans Headline', Georgia, serif; background-image: url(background.jpeg); background-size: cover; background-attachment: fixed; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: sticky; top: 0; width: 100%;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly;
+      background-color: #121212; min-height: 60px;
+      box-shadow: 0 3px 12px rgba(20,3,3,0.608); min-width: 500px; z-index: 999;
+      border-bottom: 1px solid #1e1e1e; padding: 0 24px; gap: 16px;
+    }
+    .nav-brand { color: #00bfa5; font-weight: 700; font-size: 20px; letter-spacing: 1px; }
+    .navlinks {
+      padding: 8px 14px; display: inline-block; color: whitesmoke; font-size: 20px;
+      font-family: "Stack Sans Headline", sans-serif; transition: transform 0.25s ease;
+      text-decoration: none;
+    }
+    .navlinks:hover {
+      transform: scale(1.3);
+      background: linear-gradient(135deg, #ccefff, #00bfa5);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 5px rgba(163,232,253,0.6), 0 0 8px rgba(72,180,207,0.6);
+    }
+    .logo { height: 80px; width: auto; }
+    .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 20px; padding: 5px 12px;
+      color: #ccc; font-size: 13px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .user-chip:hover { border-color: #00bfa5; background: #252525; }
+    .user-chip.active { border-color: #00bfa5; background: rgba(0,191,165,0.1); color: #00bfa5; }
+    .user-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfa5, #00796b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 11px; font-weight: 700;
+    }
+
+    /* ── PROFILE PAGE ── */
+    .profile-page {
+      min-height: calc(100vh - 60px);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 48px 20px;
+    }
+    .profile-card {
+      background: rgba(26,26,26,0.95); backdrop-filter: blur(16px);
+      border: 1px solid #2a2a2a; border-radius: 20px;
+      padding: 40px 44px; width: 100%; max-width: 520px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+
+    /* Avatar block */
+    .profile-avatar-block {
+      display: flex; flex-direction: column; align-items: center; margin-bottom: 36px;
+    }
+    .profile-avatar-large {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfa5, #00796b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 28px; font-weight: 700; margin-bottom: 14px;
+      box-shadow: 0 0 0 4px rgba(0,191,165,0.2);
+    }
+    .profile-name-display { color: #eee; font-size: 22px; font-weight: 700; }
+    .profile-username-display { color: #555; font-size: 14px; margin-top: 4px; }
+
+    /* Section titles */
+    .section-title {
+      color: #00bfa5; font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    /* Fields */
+    .field-group { margin-bottom: 28px; }
+    .field-row { margin-bottom: 14px; }
+    .field-row label {
+      display: block; font-size: 12px; color: #666;
+      font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .field-input {
+      width: 100%; padding: 10px 14px;
+      background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 8px;
+      color: #ddd; font-family: 'Stack Sans Headline', Georgia, serif;
+      font-size: 15px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-input:focus { border-color: #00bfa5; box-shadow: 0 0 0 3px rgba(0,191,165,0.1); }
+    .field-input:disabled { opacity: 0.4; cursor: not-allowed; }
+    .field-input.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+
+    /* Password strength bar */
+    .strength-bar-wrap { margin-top: 6px; height: 4px; background: #2a2a2a; border-radius: 2px; overflow: hidden; }
+    .strength-bar { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px; border: none; border-radius: 8px;
+      font-family: 'Stack Sans Headline', Georgia, serif;
+      font-size: 14px; cursor: pointer; transition: background 0.2s, opacity 0.2s;
+      font-weight: 600;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary  { background: #00bfa5; color: #fff; }
+    .btn-primary:hover:not(:disabled)  { background: #00a896; }
+    .btn-danger   { background: #ef4444; color: #fff; }
+    .btn-danger:hover:not(:disabled)   { background: #dc2626; }
+    .btn-secondary { background: #2a2a2a; color: #ccc; }
+    .btn-secondary:hover:not(:disabled) { background: #333; }
+    .btn-full { width: 100%; }
+
+    /* Status messages */
+    .msg { font-size: 13px; font-weight: 600; padding: 10px 14px; border-radius: 8px; margin-top: 10px; }
+    .msg-success { background: rgba(0,191,165,0.1); color: #00bfa5; border: 1px solid rgba(0,191,165,0.3); }
+    .msg-error   { background: rgba(239,68,68,0.1);   color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid #1e1e1e; margin: 28px 0; }
+
+    /* Unauth */
+    .unauth-screen {
+      min-height: calc(100vh - 60px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .unauth-card {
+      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
+      padding: 40px 36px; max-width: 400px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .unauth-card h2 { color: #00bfa5; font-size: 22px; margin-bottom: 12px; }
+    .unauth-card p  { color: #666; font-size: 14px; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// ─── API CONFIG ───────────────────────────────────────────────────────────────
+const API = "http://localhost:5000";
+
+function getToken() { return localStorage.getItem("token") || null; }
+function getName()  { return localStorage.getItem("name")  || "User"; }
+
+async function apiFetch(path, opts = {}) {
+  const token = getToken();
+  const res = await fetch(API + path, {
+    ...opts,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(opts.headers || {}),
+    },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+const apiGetMe = () => apiFetch("/me");
+
+const apiUpdateName = (fullName) =>
+  apiFetch("/profile/name", { method: "PUT", body: JSON.stringify({ fullName }) });
+
+const apiUpdateUsername = (username) =>
+  apiFetch("/profile/username", { method: "PUT", body: JSON.stringify({ username }) });
+
+const apiUpdatePassword = (currentPassword, newPassword) =>
+  apiFetch("/profile/password", { method: "PUT", body: JSON.stringify({ currentPassword, newPassword }) });
+
+const apiDeleteAccount = (password) =>
+  apiFetch("/profile", { method: "DELETE", body: JSON.stringify({ password }) });
+
+// ─── PASSWORD STRENGTH ────────────────────────────────────────────────────────
+function passwordStrength(pw) {
+  if (!pw) return { score: 0, label: "", color: "#2a2a2a" };
+  let score = 0;
+  if (pw.length >= 8)  score++;
+  if (pw.length >= 12) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const levels = [
+    { label: "Too short",  color: "#ef4444" },
+    { label: "Weak",       color: "#f97316" },
+    { label: "Fair",       color: "#eab308" },
+    { label: "Good",       color: "#84cc16" },
+    { label: "Strong",     color: "#00bfa5" },
+    { label: "Very strong",color: "#00bfa5" },
+  ];
+  return { score, ...levels[Math.min(score, 5)] };
+}
+
+// ─── PROFILE PAGE ─────────────────────────────────────────────────────────────
+function ProfilePage() {
+  const token = getToken();
+
+  // ── User state ────────────────────────────────────────────────────────────
+  const [user, setUser]   = useState({ fullName: getName(), username: "" });
+  const [loading, setLoading] = useState(true);
+
+  // ── Full Name section ─────────────────────────────────────────────────────
+  const [newName,    setNewName]    = useState("");
+  const [nameMsg,    setNameMsg]    = useState(null); // { type: "success"|"error", text }
+  const [nameBusy,   setNameBusy]   = useState(false);
+
+  // ── Username section ──────────────────────────────────────────────────────
+  const [newUsername,   setNewUsername]   = useState("");
+  const [usernameMsg,   setUsernameMsg]   = useState(null);
+  const [usernameBusy,  setUsernameBusy]  = useState(false);
+
+  // ── Password section ──────────────────────────────────────────────────────
+  const [curPw,    setCurPw]    = useState("");
+  const [newPw,    setNewPw]    = useState("");
+  const [confirmPw,setConfirmPw]= useState("");
+  const [pwMsg,    setPwMsg]    = useState(null);
+  const [pwBusy,   setPwBusy]   = useState(false);
+
+  // ── Delete account ────────────────────────────────────────────────────────
+  const [showDelete,    setShowDelete]    = useState(false);
+  const [deletePw,      setDeletePw]      = useState("");
+  const [deleteMsg,     setDeleteMsg]     = useState(null);
+  const [deleteBusy,    setDeleteBusy]    = useState(false);
+
+  // ── Load user on mount ────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!token) return;
+    apiGetMe()
+      .then(data => {
+        setUser(data);
+        setNewName(data.fullName);
+        setNewUsername(data.username);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  // initials 
+  const initials = user.fullName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+
+  const handleUpdateName = async () => {
+    const name = newName.trim();
+    if (!name) return setNameMsg({ type: "error", text: "Full name cannot be empty." });
+    if (name === user.fullName) return setNameMsg({ type: "error", text: "That's already your name." });
+    setNameBusy(true); setNameMsg(null);
+    try {
+      await apiUpdateName(name);
+      setUser(u => ({ ...u, fullName: name }));
+      localStorage.setItem("name", name);
+      setNameMsg({ type: "success", text: "Full name updated successfully." });
+    } catch {
+      setNameMsg({ type: "error", text: "Failed to update name. Try again." });
+    }
+    setNameBusy(false);
+  };
+
+  // PUT /profile/username  →  $set { username }  (unique index enforced)
+  const handleUpdateUsername = async () => {
+    const uname = newUsername.trim().toLowerCase();
+    if (!uname) return setUsernameMsg({ type: "error", text: "Username cannot be empty." });
+    if (uname === user.username) return setUsernameMsg({ type: "error", text: "That's already your username." });
+    if (!/^[a-z0-9_]{3,20}$/.test(uname)) return setUsernameMsg({ type: "error", text: "3–20 chars, letters/numbers/underscores only." });
+    setUsernameBusy(true); setUsernameMsg(null);
+    try {
+      const res = await apiUpdateUsername(uname);
+      if (res.message === "Username taken") {
+        setUsernameMsg({ type: "error", text: "That username is already taken." });
+      } else {
+        setUser(u => ({ ...u, username: uname }));
+        setUsernameMsg({ type: "success", text: "Username updated successfully." });
+      }
+    } catch {
+      setUsernameMsg({ type: "error", text: "Failed to update username. Try again." });
+    }
+    setUsernameBusy(false);
+  };
+
+  // PUT /profile/password  →  bcrypt.compare old, then $set { password: newHash }
+  const handleUpdatePassword = async () => {
+    if (!curPw) return setPwMsg({ type: "error", text: "Enter your current password." });
+    if (!newPw)  return setPwMsg({ type: "error", text: "Enter a new password." });
+    if (newPw.length < 6) return setPwMsg({ type: "error", text: "Password must be at least 6 characters." });
+    if (newPw !== confirmPw) return setPwMsg({ type: "error", text: "New passwords don't match." });
+    setPwBusy(true); setPwMsg(null);
+    try {
+      const res = await apiUpdatePassword(curPw, newPw);
+      if (res.message === "Wrong password") {
+        setPwMsg({ type: "error", text: "Current password is incorrect." });
+      } else {
+        setPwMsg({ type: "success", text: "Password changed successfully." });
+        setCurPw(""); setNewPw(""); setConfirmPw("");
+      }
+    } catch {
+      setPwMsg({ type: "error", text: "Failed to update password. Try again." });
+    }
+    setPwBusy(false);
+  };
+
+  // DELETE /profile  →  db.users.deleteOne({ _id: userId })
+  const handleDeleteAccount = async () => {
+    if (!deletePw) return setDeleteMsg({ type: "error", text: "Enter your password to confirm." });
+    setDeleteBusy(true); setDeleteMsg(null);
+    try {
+      const res = await apiDeleteAccount(deletePw);
+      if (res.message === "Wrong password") {
+        setDeleteMsg({ type: "error", text: "Incorrect password." });
+        setDeleteBusy(false);
+      } else {
+        localStorage.clear();
+        window.location.href = "Fin.html";
+      }
+    } catch {
+      setDeleteMsg({ type: "error", text: "Failed to delete account. Try again." });
+      setDeleteBusy(false);
+    }
+  };
+  // Clear local storage and redirect to index.html
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "index.html";
+  };
+  const strength = passwordStrength(newPw);
+
+  // ── Not logged in ─────────────────────────────────────────────────────────
+  if (!token) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <nav className="navbar">
+          <span className="nav-brand">⬡ Interface Labs</span>
+          <a href="colorcontrast.html" className="navlinks">Color Palette</a>
+          <a href="typo.html" className="navlinks">Font Evaluate</a>
+        </nav>
+        <div className="unauth-screen">
+          <div className="unauth-card">
+            <h2>⬡ Interface Labs</h2>
+            <p>Please sign in to view your profile.</p>
+            <a href="Fin.html" className="btn btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
+              Go to Sign In →
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+
+      {/* ── NAVBAR ── */}
+      <nav className="navbar">
+        <a href="Fin.html"><img src="interfacelabslogo.png" className="logo" alt="Interface Labs Logo" width="30" /></a>
+        <a href="create.html"        className="navlinks">Create Element</a>
+        <a href="colorcontrast.html" className="navlinks">Color Palette</a>
+        <a href="typo.html"          className="navlinks">Font Evaluate</a>
+        <a href="dragdrop.html"      className="navlinks">Drag &amp; Drop</a>
+        {/* User chip — active state since we're on the profile page */}
+        <a href="profile.html" className="user-chip active">
+          <div className="user-avatar">{initials}</div>
+          <span>{user.fullName}</span>
+        </a>
+      </nav>
+
+      {/* ── PROFILE CARD ── */}
+      <div className="profile-page">
+        <div className="profile-card">
+
+          {/* Avatar + display name */}
+          <div className="profile-avatar-block">
+            <div className="profile-avatar-large">{initials}</div>
+            <div className="profile-name-display">{user.fullName}</div>
+            <div className="profile-username-display">@{user.username || "…"}</div>
+          </div>
+
+          {loading ? (
+            <p style={{ color: "#555", textAlign: "center" }}>Loading…</p>
+          ) : <>
+
+            {/* ── SECTION: Full Name ────────────────────────────────────── */}
+            {/* PUT /profile/name → $set { fullName: <value> } */}
+            <div className="section-title">Full Name</div>
+            <div className="field-group">
+              <div className="field-row">
+                <label>DISPLAY NAME</label>
+                <input
+                  className="field-input"
+                  value={newName}
+                  onChange={e => setNewName(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && handleUpdateName()}
+                  placeholder="Your full name"
+                />
+              </div>
+              <button className="btn btn-primary btn-full" onClick={handleUpdateName} disabled={nameBusy}>
+                {nameBusy ? "Saving…" : "Update Name"}
+              </button>
+              {nameMsg && <div className={`msg msg-${nameMsg.type}`}>{nameMsg.text}</div>}
+            </div>
+
+            <hr className="divider" />
+
+            {/* ── SECTION: Username ─────────────────────────────────────── */}
+            {/* PUT /profile/username → $set { username: <value> } */}
+            {/* Unique index on username enforced at DB level */}
+            <div className="section-title">Username</div>
+            <div className="field-group">
+              <div className="field-row">
+                <label>USERNAME</label>
+                <input
+                  className="field-input"
+                  value={newUsername}
+                  onChange={e => setNewUsername(e.target.value.toLowerCase())}
+                  onKeyDown={e => e.key === "Enter" && handleUpdateUsername()}
+                  placeholder="your_username"
+                  maxLength={20}
+                />
+              </div>
+              <p style={{ color: "#555", fontSize: 12, marginBottom: 12 }}>
+                3–20 characters · letters, numbers, underscores only · must be unique
+              </p>
+              <button className="btn btn-primary btn-full" onClick={handleUpdateUsername} disabled={usernameBusy}>
+                {usernameBusy ? "Saving…" : "Update Username"}
+              </button>
+              {usernameMsg && <div className={`msg msg-${usernameMsg.type}`}>{usernameMsg.text}</div>}
+            </div>
+
+            <hr className="divider" />
+
+            {/* ── SECTION: Password ─────────────────────────────────────── */}
+            {/* PUT /profile/password → bcrypt verify old → $set { password: newHash } */}
+            <div className="section-title">Change Password</div>
+            <div className="field-group">
+              <div className="field-row">
+                <label>CURRENT PASSWORD</label>
+                <input
+                  type="password"
+                  className="field-input"
+                  value={curPw}
+                  onChange={e => setCurPw(e.target.value)}
+                  placeholder="Enter current password"
+                  autoComplete="current-password"
+                />
+              </div>
+              <div className="field-row">
+                <label>NEW PASSWORD</label>
+                <input
+                  type="password"
+                  className={`field-input${newPw && confirmPw && newPw !== confirmPw ? " error" : ""}`}
+                  value={newPw}
+                  onChange={e => setNewPw(e.target.value)}
+                  placeholder="Enter new password"
+                  autoComplete="new-password"
+                />
+                {newPw && (
+                  <div className="strength-bar-wrap">
+                    <div className="strength-bar"
+                      style={{ width: `${(strength.score / 5) * 100}%`, background: strength.color }} />
+                  </div>
+                )}
+                {newPw && (
+                  <p style={{ fontSize: 11, color: strength.color, marginTop: 4 }}>{strength.label}</p>
+                )}
+              </div>
+              <div className="field-row">
+                <label>CONFIRM NEW PASSWORD</label>
+                <input
+                  type="password"
+                  className={`field-input${newPw && confirmPw && newPw !== confirmPw ? " error" : ""}`}
+                  value={confirmPw}
+                  onChange={e => setConfirmPw(e.target.value)}
+                  placeholder="Repeat new password"
+                  autoComplete="new-password"
+                />
+              </div>
+              <button className="btn btn-primary btn-full" onClick={handleUpdatePassword} disabled={pwBusy}>
+                {pwBusy ? "Saving…" : "Change Password"}
+              </button>
+              {pwMsg && <div className={`msg msg-${pwMsg.type}`}>{pwMsg.text}</div>}
+            </div>
+
+            <hr className="divider" />
+
+            {/* ── SECTION: Danger Zone ──────────────────────────────────── */}
+            {/* DELETE /profile → db.users.deleteOne({ _id: userId }) */}
+          <div className="section-title">Session Management</div>
+          <div className="field-group">
+            <button 
+              className="btn btn-secondary btn-full" 
+              onClick={handleLogout}
+              style={{ marginBottom: '12px' }}
+            >
+              Log Out
+            </button>
+          </div>
+
+          <hr className="divider" />
+
+          <div className="section-title">Danger Zone</div>
+            {!showDelete ? (
+              <button className="btn btn-danger btn-full" onClick={() => setShowDelete(true)}>
+                Delete Account
+              </button>
+            ) : (
+              <div style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 10, padding: "16px 18px" }}>
+                <p style={{ color: "#f87171", fontSize: 13, marginBottom: 14 }}>
+                  This will permanently delete your account and all projects. This cannot be undone.
+                </p>
+                <div className="field-row">
+                  <label>CONFIRM WITH YOUR PASSWORD</label>
+                  <input
+                    type="password"
+                    className="field-input"
+                    value={deletePw}
+                    onChange={e => setDeletePw(e.target.value)}
+                    placeholder="Your password"
+                  />
+                </div>
+                <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+                  <button className="btn btn-danger" style={{ flex: 1 }} onClick={handleDeleteAccount} disabled={deleteBusy}>
+                    {deleteBusy ? "Deleting…" : "Yes, Delete My Account"}
+                  </button>
+                  <button className="btn btn-secondary" onClick={() => { setShowDelete(false); setDeletePw(""); setDeleteMsg(null); }}>
+                    Cancel
+                  </button>
+                </div>
+                {deleteMsg && <div className={`msg msg-${deleteMsg.type}`}>{deleteMsg.text}</div>}
+              </div>
+            )}
+
+          </>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<ProfilePage />);
+</script>
+</body>
+</html>

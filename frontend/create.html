@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create - Interface Labs</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Guides&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <style>
+      body,
+      html {
+        margin: 0px;
+        padding: 0px;
+        height: 100%;
+        width: 100%;
+        background-image: url(background.jpeg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+      .navbar {
+        position: sticky;
+        top: 0px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-evenly;
+        background-color: #121212;
+        min-height: 60px;
+        box-shadow: 0 3px 12px rgba(20, 3, 3, 0.608);
+        min-width: 500px;
+        z-index: 999;
+      }
+      .user-chip {
+        display: flex; align-items: center; gap: 8px;
+        background: #1e1e1e; border: 1px solid #2a2a2a;
+        border-radius: 20px; padding: 5px 12px;
+        color: #ccc; font-size: 13px; cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+        text-decoration: none;
+        font-family: "Stack Sans Headline", sans-serif;
+      }
+      .user-chip:hover { border-color: #00bfa5; background: #252525; }
+      .user-avatar {
+        width: 26px; height: 26px; border-radius: 50%;
+        background: linear-gradient(135deg, #00bfa5, #00796b);
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-size: 11px; font-weight: 700;
+      }
+      .navlinks {
+        padding: 8px 14px;
+        display: inline-block;
+        color: whitesmoke;
+        font-size: 20px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        transition: transform 0.25s ease;
+        text-shadow: 0.25s ease;
+        text-decoration: none;
+      }
+.navlinks:hover {
+        font-size: larger;
+        transform: scale(1.3);
+        background: linear-gradient(135deg, #ccefff, #00bfa5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 5px rgba(163, 232, 253, 0.6),
+          0 0 8px rgba(72, 180, 207, 0.6);
+      }
+      
+      .logo {
+        height: 80px;
+        width: auto;
+      }
+      .main-container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+        flex-wrap: wrap;
+      }
+      .left-panel,
+      .right-panel {
+        flex: 1;
+        min-width: 300px;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .panel-title {
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 24px;
+        color: #121212;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .control-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 16px;
+        color: #121212;
+        margin-bottom: 5px;
+      }
+      select,
+      input[type="text"],
+      input[type="color"],
+      input[type="number"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        border: 2px solid #00bfa5;
+        border-radius: 5px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      .slider-value {
+        display: inline-block;
+        margin-left: 10px;
+        font-family: "Stack Sans Headline", sans-serif;
+        color: #121212;
+      }
+      .color-indicator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .color-box {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+      .color-hex {
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 8px 12px;
+        border-radius: 5px;
+        color: #000;
+        border: 2px solid #ccc;
+      }
+      .preview-area {
+        min-height: 200px;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .code-area {
+        display: none;
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 14px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .btn {
+        padding: 10px 20px;
+        background-color: #00bfa5;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 5px;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #0a8a96;
+      }
+      .btn-secondary {
+        background-color: #121212;
+      }
+      .btn-secondary:hover {
+        background-color: #2a2a2a;
+      }
+      .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .hidden {
+        display: none;
+      }
+         .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 20px; padding: 5px 12px;
+      color: #ccc; font-size: 13px; cursor: default;
+    }
+    .user-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfa5, #00796b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 11px; font-weight: 700;
+    }
+
+    /* ── NOT LOGGED IN SCREEN ── */
+    .unauth-screen {
+      min-height: calc(100vh - 60px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .unauth-card {
+      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
+      padding: 40px 36px; max-width: 400px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .unauth-card h2 { color: #00bfa5; font-size: 22px; margin-bottom: 12px; }
+    .unauth-card p  { color: #666; font-size: 14px; margin-bottom: 24px; }
+
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="Fin.html"
+        ><img
+          src="interfacelabslogo.png"
+          class="logo"
+          alt="Interface Labs Logo"
+          width="30"
+      /></a>
+      <a href="#" class="navlinks">Create Element</a>
+      <a href="colorcontrast.html" class="navlinks">Color Pallete</a>
+      <a href="typo.html" class="navlinks">Font evaluate</a>
+      <a href="dragdrop.html" class="navlinks">Drag & Drop</a>
+      <div id="nav-user-chip"></div>
+<script>
+  const name = localStorage.getItem("name") || "";
+  const initials = name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase();
+  if (name) {
+    document.getElementById("nav-user-chip").innerHTML =
+      `<a href="profile.html" class="user-chip">
+         <div class="user-avatar">${initials}</div>
+         <span>${name}</span>
+       </a>`;
+  }
+</script>
+    </nav>
+
+    <div class="main-container">
+      
+      <div class="left-panel">
+        <h2 class="panel-title">Element Creator</h2>
+
+        <div class="control-group">
+          <label for="element-type">Select Element Type:</label>
+          <select id="element-type">
+            <option value="">-- Choose Element --</option>
+            <option value="form">Form</option>
+            <option value="list">List</option>
+            <option value="button">Button</option>
+            <option value="paragraph">Paragraph</option>
+          </select>
+        </div>
+
+        <div id="element-options"></div>
+      </div>
+
+      
+      <div class="right-panel">
+        <h2 class="panel-title">Preview</h2>
+        
+        <div class="button-group">
+          <button class="btn" id="toggle-view">Show Code</button>
+          <button class="btn btn-secondary" id="copy-code">Copy Code</button>
+        </div>
+
+        <div class="preview-area" id="preview-area">
+          <p style="color: #999; font-family: 'Stack Sans Headline', sans-serif;">
+            Select an element type to get started
+          </p>
+        </div>
+
+        <div class="code-area" id="code-area"></div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 3000,
+        easing: "ease-out",
+      });
+
+      const elementType = document.getElementById("element-type");
+      const elementOptions = document.getElementById("element-options");
+      const previewArea = document.getElementById("preview-area");
+      const codeArea = document.getElementById("code-area");
+      const toggleViewBtn = document.getElementById("toggle-view");
+      const copyCodeBtn = document.getElementById("copy-code");
+
+      let currentElement = {
+        type: "",
+        properties: {},
+      };
+
+      function hslToHex(h, s, l) {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+          const k = (n + h / 30) % 12;
+          const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+          return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+      }
+
+      elementType.addEventListener("change", function () {
+        const type = this.value;
+        currentElement.type = type;
+        currentElement.properties = {};
+        
+        if (!type) {
+          elementOptions.innerHTML = "";
+          previewArea.innerHTML = '<p style="color: #999; font-family: \'Stack Sans Headline\', sans-serif;">Select an element type to get started</p>';
+          codeArea.textContent = "";
+          return;
+        }
+
+        generateOptions(type);
+        updatePreview();
+      });
+
+      function generateOptions(type) {
+        let html = "";
+
+        switch (type) {
+          case "form":
+            currentElement.properties = {
+              fields: [
+                { labelText: "Name:", inputType: "text", placeholder: "Enter your name..." }
+              ],
+              buttonText: "Submit",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "16",
+              labelColor: "#00bfa5",
+              inputBgColor: "#ffffff",
+              buttonBgColor: "#00bfa5",
+              buttonTextColor: "#ffffff",
+            };
+
+            html = `
+              <div class="control-group">
+                <label>Number of Input Fields:</label>
+                <input type="number" id="fieldCount" min="1" max="10" value="1" />
+              </div>
+              <div id="field-inputs">
+                <div class="field-config" data-index="0">
+                  <h4 style="font-family: 'Stack Sans Headline', sans-serif; color: #00bfa5; margin: 10px 0 5px 0;">Field 1</h4>
+                  <div class="control-group">
+                    <label>Label Text:</label>
+                    <input type="text" class="field-label" data-index="0" value="Name:" />
+                  </div>
+                  <div class="control-group">
+                    <label>Input Type:</label>
+                    <select class="field-type" data-index="0">
+                      <option value="text">Text</option>
+                      <option value="email">Email</option>
+                      <option value="password">Password</option>
+                      <option value="number">Number</option>
+                      <option value="tel">Phone</option>
+                      <option value="date">Date</option>
+                    </select>
+                  </div>
+                  <div class="control-group">
+                    <label>Placeholder:</label>
+                    <input type="text" class="field-placeholder" data-index="0" value="Enter your name..." />
+                  </div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Button Text:</label>
+                <input type="text" id="buttonText" value="${currentElement.properties.buttonText}" />
+              </div>
+              <div class="control-group">
+                <label>Font Family:</label>
+                <select id="fontFamily">
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                  <option value="'Courier New', monospace">Courier New</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="Verdana, sans-serif">Verdana</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Font Size: <span class="slider-value" id="fontSizeValue">16px</span></label>
+                <input type="range" id="fontSize" min="12" max="32" value="16" />
+              </div>
+              <div class="control-group">
+                <label>Label Color:</label>
+                <div class="color-indicator">
+                  <input type="color" id="labelColor" value="${currentElement.properties.labelColor}" style="display: none;" />
+                  <div class="color-box" id="labelColorBox" style="background-color: ${currentElement.properties.labelColor};" onclick="document.getElementById('labelColor').click()"></div>
+                  <div class="color-hex" id="labelColorHex" style="background-color: ${currentElement.properties.labelColor};">${currentElement.properties.labelColor.toUpperCase()}</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Input Background:</label>
+                <div class="color-indicator">
+                  <input type="color" id="inputBgColor" value="${currentElement.properties.inputBgColor}" style="display: none;" />
+                  <div class="color-box" id="inputBgColorBox" style="background-color: ${currentElement.properties.inputBgColor};" onclick="document.getElementById('inputBgColor').click()"></div>
+                  <div class="color-hex" id="inputBgColorHex" style="background-color: ${currentElement.properties.inputBgColor};">${currentElement.properties.inputBgColor.toUpperCase()}</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Button Background:</label>
+                <div class="color-indicator">
+                  <input type="color" id="buttonBgColor" value="${currentElement.properties.buttonBgColor}" style="display: none;" />
+                  <div class="color-box" id="buttonBgColorBox" style="background-color: ${currentElement.properties.buttonBgColor};" onclick="document.getElementById('buttonBgColor').click()"></div>
+                  <div class="color-hex" id="buttonBgColorHex" style="background-color: ${currentElement.properties.buttonBgColor};">${currentElement.properties.buttonBgColor.toUpperCase()}</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Button Text Color:</label>
+                <div class="color-indicator">
+                  <input type="color" id="buttonTextColor" value="${currentElement.properties.buttonTextColor}" style="display: none;" />
+                  <div class="color-box" id="buttonTextColorBox" style="background-color: ${currentElement.properties.buttonTextColor};" onclick="document.getElementById('buttonTextColor').click()"></div>
+                  <div class="color-hex" id="buttonTextColorHex" style="background-color: ${currentElement.properties.buttonTextColor};">${currentElement.properties.buttonTextColor.toUpperCase()}</div>
+                </div>
+              </div>
+            `;
+            break;
+
+          case "list":
+            currentElement.properties = {
+              listType: "ul",
+              items: "Item 1, Item 2, Item 3",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "16",
+              textColor: "#808080",
+              bulletColor: "#00bfa5",
+            };
+
+            html = `
+              <div class="control-group">
+                <label>List Type:</label>
+                <select id="listType">
+                  <option value="ul">Unordered (Bullets)</option>
+                  <option value="ol">Ordered (Numbers)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>List Items (comma-separated):</label>
+                <textarea id="items" rows="3">${currentElement.properties.items}</textarea>
+              </div>
+              <div class="control-group">
+                <label>Font Family:</label>
+                <select id="fontFamily">
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                  <option value="'Courier New', monospace">Courier New</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="Verdana, sans-serif">Verdana</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Font Size: <span class="slider-value" id="fontSizeValue">16px</span></label>
+                <input type="range" id="fontSize" min="12" max="32" value="16" />
+              </div>
+              <div class="control-group">
+                <label>Text Color:</label>
+                <div class="color-indicator">
+                  <input type="color" id="textColor" value="${currentElement.properties.textColor}" style="display: none;" />
+                  <div class="color-box" id="textColorBox" style="background-color: ${currentElement.properties.textColor};" onclick="document.getElementById('textColor').click()"></div>
+                  <div class="color-hex" id="textColorHex" style="background-color: ${currentElement.properties.textColor};">${currentElement.properties.textColor.toUpperCase()}</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Bullet/Number Color:</label>
+                <div class="color-indicator">
+                  <input type="color" id="bulletColor" value="${currentElement.properties.bulletColor}" style="display: none;" />
+                  <div class="color-box" id="bulletColorBox" style="background-color: ${currentElement.properties.bulletColor};" onclick="document.getElementById('bulletColor').click()"></div>
+                  <div class="color-hex" id="bulletColorHex" style="background-color: ${currentElement.properties.bulletColor};">${currentElement.properties.bulletColor.toUpperCase()}</div>
+                </div>
+              </div>
+            `;
+            break;
+          case "button":
+            currentElement.properties = {
+              buttonText: "Click Me",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "16",
+              textColor: "#ffffff",
+              borderRadius: "5",
+              padding: "10",
+              buttonBgColor: "#00bfa5"
+            };
+
+            html = `
+              <div class="control-group">
+                <label>Button Text:</label>
+                <input type="text" id="buttonText" value="${currentElement.properties.buttonText}" />
+              </div>
+
+              <div class="control-group">
+                <label>Font Family:</label>
+                <select id="fontFamily">
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                  <option value="'Courier New', monospace">Courier New</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="Verdana, sans-serif">Verdana</option>
+                </select>
+              </div>
+
+              <div class="control-group">
+                <label>Font Size: <span class="slider-value" id="fontSizeValue">16px</span></label>
+                <input type="range" id="fontSize" min="12" max="32" value="16" />
+              </div>
+
+              <div class="control-group">
+                <label>Text Color:</label>
+                <div class="color-indicator">
+                  <input type="color" id="textColor" value="${currentElement.properties.textColor}" style="display:none;" />
+                  <div class="color-box" id="textColorBox" style="background-color:${currentElement.properties.textColor};" onclick="document.getElementById('textColor').click()"></div>
+                  <div class="color-hex" id="textColorHex" style="background-color:${currentElement.properties.textColor};">
+                    ${currentElement.properties.textColor.toUpperCase()}
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Button Background:</label>
+                <div class="color-indicator">
+                  <input type="color" id="buttonBgColor" value="${currentElement.properties.buttonBgColor}" style="display:none;" />
+                  <div class="color-box" id="buttonBgColorBox" style="background-color:${currentElement.properties.buttonBgColor};" onclick="document.getElementById('buttonBgColor').click()"></div>
+                  <div class="color-hex" id="buttonBgColorHex" style="background-color:${currentElement.properties.buttonBgColor};">
+                    ${currentElement.properties.buttonBgColor.toUpperCase()}
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label>Border Radius: <span class="slider-value" id="borderRadiusValue">5px</span></label>
+                <input type="range" id="borderRadius" min="0" max="50" value="5" />
+              </div>
+
+              <div class="control-group">
+                <label>Padding: <span class="slider-value" id="paddingValue">10px</span></label>
+                <input type="range" id="padding" min="5" max="30" value="10" />
+              </div>
+            `;
+            break;
+
+          case "paragraph":
+            currentElement.properties = {
+              text: "This is a sample paragraph. Edit the properties to customize it.",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "16",
+              textColor: "#000080",
+              lineHeight: "1.5",
+              textAlign: "left",
+            };
+
+            html = `
+              <div class="control-group">
+                <label>Paragraph Text:</label>
+                <textarea id="text" rows="4">${currentElement.properties.text}</textarea>
+              </div>
+              <div class="control-group">
+                <label>Font Family:</label>
+                <select id="fontFamily">
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                  <option value="'Courier New', monospace">Courier New</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="Verdana, sans-serif">Verdana</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Font Size: <span class="slider-value" id="fontSizeValue">16px</span></label>
+                <input type="range" id="fontSize" min="12" max="32" value="16" />
+              </div>
+              <div class="control-group">
+                <label>Text Color:</label>
+                <div class="color-indicator">
+                  <input type="color" id="textColor" value="${currentElement.properties.textColor}" style="display: none;" />
+                  <div class="color-box" id="textColorBox" style="background-color: ${currentElement.properties.textColor};" onclick="document.getElementById('textColor').click()"></div>
+                  <div class="color-hex" id="textColorHex" style="background-color: ${currentElement.properties.textColor};">${currentElement.properties.textColor.toUpperCase()}</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <label>Line Height: <span class="slider-value" id="lineHeightValue">1.5</span></label>
+                <input type="range" id="lineHeight" min="1" max="3" step="0.1" value="1.5" />
+              </div>
+              <div class="control-group">
+                <label>Text Align:</label>
+                <select id="textAlign">
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                  <option value="justify">Justify</option>
+                </select>
+              </div>
+            `;
+            break;
+        }
+
+        elementOptions.innerHTML = html;
+        attachEventListeners();
+      }
+
+      function attachEventListeners() {
+        const inputs = elementOptions.querySelectorAll("input, select, textarea");
+        inputs.forEach((input) => {
+          input.addEventListener("input", function () {
+            const id = this.id;
+            let value = this.value;
+
+            // Handle field count change for forms
+            if (id === "fieldCount") {
+              generateFormFields(parseInt(value));
+              return;
+            }
+
+            // Individual field changes
+            if (this.classList.contains("field-label") || 
+                this.classList.contains("field-type") || 
+                this.classList.contains("field-placeholder")) {
+              const index = parseInt(this.dataset.index);
+              const fieldType = this.classList.contains("field-label") ? "labelText" :
+                               this.classList.contains("field-type") ? "inputType" : "placeholder";
+              currentElement.properties.fields[index][fieldType] = value;
+              updatePreview();
+              return;
+            }
+
+            // Color pickers
+            if (this.type === "color") {
+              const colorBox = document.getElementById(id + "Box");
+              const colorHex = document.getElementById(id + "Hex");
+              if (colorBox && colorHex) {
+                colorBox.style.backgroundColor = value;
+                colorHex.textContent = value.toUpperCase();
+                colorHex.style.backgroundColor = value;
+              }
+            }
+
+            if (this.type === "range") {
+              const valueDisplay = document.getElementById(id + "Value");
+              if (id === "fontSize" || id === "borderRadius" || id === "padding") {
+                valueDisplay.textContent = value + "px";
+              } else if (id === "lineHeight") {
+                valueDisplay.textContent = value;
+              } else if (id === "bgHue") {
+                const hexColor = hslToHex(value, 70, 50);
+                valueDisplay.textContent = hexColor;
+                
+                
+                const colorBox = document.getElementById(id === "bgHue" ? "bgHueBox" : "buttonBgColorBox");
+                const colorHex = document.getElementById(id === "bgHue" ? "bgHueHex" : "buttonBgColorHex");
+                if (colorBox && colorHex) {
+                  const hslColor = `hsl(${value}, 70%, 50%)`;
+                  colorBox.style.backgroundColor = hslColor;
+                  colorHex.textContent = hexColor.toUpperCase();
+                  colorHex.style.backgroundColor = hexColor;
+                }
+                
+                currentElement.properties[id] = value;
+                updatePreview();
+                return;
+              }
+            }
+
+            currentElement.properties[id] = value;
+            updatePreview();
+          });
+        });
+      }
+
+      function generateFormFields(count) {
+        const MAX_FIELDS = 10; // maximum allowed fields
+        if (count > MAX_FIELDS) count = MAX_FIELDS;  
+        if (count < 0) count = 0; 
+        const fieldInputsContainer = document.getElementById("field-inputs");
+        if (!fieldInputsContainer) return;
+        // Update fields array
+        const currentCount = currentElement.properties.fields.length;
+        if (count > currentCount) {
+          for (let i = currentCount; i < count; i++) {
+            currentElement.properties.fields.push({
+              labelText: `Field ${i + 1}:`,
+              inputType: "text",
+              placeholder: `Enter field ${i + 1}...`
+            });
+          }
+        } else if (count < currentCount) {
+          currentElement.properties.fields = currentElement.properties.fields.slice(0, count);
+        }
+
+        // Regenerate field inputs
+        let html = "";
+        for (let i = 0; i < count; i++) {
+          const field = currentElement.properties.fields[i];
+          html += `
+            <div class="field-config" data-index="${i}">
+              <h4 style="font-family: 'Stack Sans Headline', sans-serif; color: #00bfa5; margin: 10px 0 5px 0;">Field ${i + 1}</h4>
+              <div class="control-group">
+                <label>Label Text:</label>
+                <input type="text" class="field-label" data-index="${i}" value="${field.labelText}" />
+              </div>
+              <div class="control-group">
+                <label>Input Type:</label>
+                <select class="field-type" data-index="${i}">
+                  <option value="text" ${field.inputType === "text" ? "selected" : ""}>Text</option>
+                  <option value="email" ${field.inputType === "email" ? "selected" : ""}>Email</option>
+                  <option value="password" ${field.inputType === "password" ? "selected" : ""}>Password</option>
+                  <option value="number" ${field.inputType === "number" ? "selected" : ""}>Number</option>
+                  <option value="tel" ${field.inputType === "tel" ? "selected" : ""}>Phone</option>
+                  <option value="date" ${field.inputType === "date" ? "selected" : ""}>Date</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Placeholder:</label>
+                <input type="text" class="field-placeholder" data-index="${i}" value="${field.placeholder}" />
+              </div>
+            </div>
+          `;
+        }
+        fieldInputsContainer.innerHTML = html;
+        attachEventListeners();
+        updatePreview();
+      }
+
+      function updatePreview() {
+        const type = currentElement.type;
+        const props = currentElement.properties;
+        let html = "";
+
+        switch (type) {
+          case "form":
+            const buttonBg = props.buttonBgColor;
+            
+            const formFields = props.fields.map(field => `
+    <label style="color: ${props.labelColor}; display: block; margin-bottom: 5px; font-family: ${props.fontFamily}; font-size: ${props.fontSize}px;">${field.labelText}</label>
+    <input 
+      type="${field.inputType}" 
+      placeholder="${field.placeholder}" 
+      style="padding: 8px; border: 2px solid #ccc; border-radius: 4px; background-color: ${props.inputBgColor}; width: 100%; box-sizing: border-box; margin-bottom: 10px; font-family: ${props.fontFamily}; font-size: ${props.fontSize}px;"
+    />`).join('\n');
+
+            html = `
+              <form style="font-family: ${props.fontFamily}; font-size: ${props.fontSize}px;">
+                ${formFields}
+    <button 
+      type="submit" 
+      style="padding: 10px 20px; background-color: ${buttonBg}; color: ${props.buttonTextColor}; border: none; border-radius: 5px; cursor: pointer; font-family: ${props.fontFamily}; font-size: ${props.fontSize}px;"
+    >
+      ${props.buttonText}
+    </button>
+              </form>
+            `;
+            break;
+
+          case "list":
+            const items = props.items.split(",").map((item) => item.trim());
+            const listTag = props.listType;
+            const listItems = items.map((item) => `  <li>${item}</li>`).join("\n");
+            html = `
+<${listTag} style="font-family: ${props.fontFamily}; font-size: ${props.fontSize}px; color: ${props.textColor}; list-style: none; padding-left: 0;">
+  <style>
+    .custom-list li::before {
+      content: '${props.listType === "ul" ? "•" : ""}';
+      color: ${props.bulletColor};
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+    .custom-list.ordered {
+      counter-reset: item;
+      list-style-type: none;
+    }
+    .custom-list.ordered li {
+      counter-increment: item;
+      padding-left: 1.5em;
+      position: relative;
+    }
+    .custom-list.ordered li::before {
+      content: counter(item) ".";
+      color: ${props.bulletColor};
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+  </style>
+${listItems}
+</${listTag}>
+            `;
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+            const list = tempDiv.querySelector(listTag);
+            list.classList.add("custom-list");
+            if (props.listType === "ol") {
+              list.classList.add("ordered");
+            } else {
+              list.style.paddingLeft = "1em";
+            }
+            html = tempDiv.innerHTML;
+            break;
+
+          case "button":
+            html = `
+          <button 
+            style="
+              padding:${props.padding}px ${props.padding * 2}px;
+              background-color:${props.buttonBgColor};
+              color:${props.textColor};
+              border:none;
+              border-radius:${props.borderRadius}px;
+              cursor:pointer;
+              font-family:${props.fontFamily};
+              font-size:${props.fontSize}px;
+            "
+          >
+            ${props.buttonText}
+          </button>
+            `;
+            break;
+
+
+          case "paragraph":
+            html = `
+              <p 
+                style="font-family: ${props.fontFamily}; font-size: ${props.fontSize}px; color: ${props.textColor}; line-height: ${props.lineHeight}; text-align: ${props.textAlign}; margin: 0;"
+              >
+                ${props.text}
+              </p>
+            `;
+            break;
+        }
+
+        previewArea.innerHTML = html;
+        updateCode();
+      }
+
+      function updateCode() {
+        let code = previewArea.innerHTML;
+        
+        // Format the code with proper indentation
+        code = code
+          .replace(/></g, '>\n<')
+          .replace(/\n\s*\n/g, '\n')
+          .trim();
+        
+        // Indent the code
+        const lines = code.split('\n');
+        let indentLevel = 0;
+        const indentedLines = lines.map(line => {
+          const trimmed = line.trim();
+          
+          if (trimmed.startsWith('</') && !trimmed.match(/<\/\w+>.*<\w+/)) {
+            indentLevel = Math.max(0, indentLevel - 1);
+          }
+          
+          const indentedLine = '  '.repeat(indentLevel) + trimmed;
+          
+          if (trimmed.startsWith('<') && 
+              !trimmed.startsWith('</') && 
+              !trimmed.endsWith('/>') && 
+              !trimmed.match(/<\w+[^>]*>.*<\/\w+>/)) {
+            indentLevel++;
+          }
+          
+          return indentedLine;
+        });
+        
+        codeArea.textContent = indentedLines.join('\n');
+      }
+
+      toggleViewBtn.addEventListener("click", function () {
+        if (previewArea.style.display === "none") {
+          previewArea.style.display = "flex";
+          codeArea.style.display = "none";
+          this.textContent = "Show Code";
+        } else {
+          previewArea.style.display = "none";
+          codeArea.style.display = "block";
+          this.textContent = "Show Preview";
+        }
+      });
+
+      copyCodeBtn.addEventListener("click", function () {
+        const code = codeArea.textContent;
+        if (!code) {
+          alert("No code to copy! Please create an element first.");
+          return;
+        }
+
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            const originalText = this.textContent;
+            this.textContent = "Copied!";
+            setTimeout(() => {
+              this.textContent = originalText;
+            }, 2000);
+          })
+          .catch((err) => {
+            alert("Failed to copy code. Please try again.");
+            console.error("Copy failed:", err);
+          });
+      });
+    </script>
+  </body>
+</html>

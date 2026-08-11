@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <title>Font Evaluate - Interface Labs</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Guides&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet" />
+    <style>
+      body,
+      html {
+        margin: 0px;
+        padding: 0px;
+        height: 100%;
+        width: 100%;
+        background-image: url(background3.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        font-family: "Stack Sans Headline", sans-serif;
+      }
+      .navbar {
+        position: sticky;
+        top: 0px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-evenly;
+        background-color: #121212;
+        min-height: 50px;
+        box-shadow: 0 3px 12px rgba(20, 3, 3, 0.608);
+        min-width: 800px;
+        z-index: 9999;
+      }
+      .user-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: #1e1e1e; border: 1px solid #2a2a2a;
+  border-radius: 20px; padding: 5px 12px;
+  color: #ccc; font-size: 13px; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+.user-chip:hover { border-color: #00bfa5; background: #252525; }
+.user-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(135deg, #00bfa5, #00796b);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 700;
+}
+      .navlinks{
+        padding: 8px 14px;
+        display: inline-block;
+        color: whitesmoke;
+        font-size: 20px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        transition: transform 0.25s ease;
+        text-shadow: 0.25s ease;
+        text-decoration: none;
+      }
+      .navlinks:hover {
+        font-size: larger;
+        transform: scale(1.3);
+        background: linear-gradient(135deg, #ccefff, #00bfa5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 5px rgba(163, 232, 253, 0.6),
+          0 0 8px rgba(72, 180, 207, 0.6);
+      }
+      .logo {
+        height: 80px;
+        width: auto;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        margin-top: 0px;
+        padding: 20px;
+        padding-top: 0px;
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      .left-panel{
+        flex: 1;
+        min-width: 150px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .right-panel {
+        flex: 1;
+        min-width: 775px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .color-manager {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.25s ease;
+        max-width: 420px;
+      }
+      .color-manager:hover { transform: translateY(-2px); }
+      .color-manager input[type="color"] { width: 50px; height: 40px; border: none; cursor: pointer; }
+      .color-manager input[type="text"] { flex: 1; padding: 8px 10px; max-width: 110px; border: none; outline: none; border-radius: 5px; }
+      .remove-btn { border-radius: 8px; padding: 6px 12px; border: none; background: #1b1b1b; color: whitesmoke; cursor: pointer; transition: background 0.3s ease; font-family: "Stack Sans Headline", sans-serif; }
+      .remove-btn:hover { background: #940000; }
+      .add-color-btn { padding: 12px 24px; border: none; border-radius: 8px; background: linear-gradient(135deg, #3e4142, #00bfa5); color: white; font-size: 16px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; font-family: "Stack Sans Headline", sans-serif; max-width: fit-content; }
+      .add-color-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 191, 165, 0.35); }
+      .add-color-btn:disabled { background: #ccc; cursor: not-allowed; }
+      .color-preview { width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15); overflow: hidden; transition: all 0.5s ease; border-radius: 8px;}
+      .preview-text { font-family: "Playwrite NZ Guides", cursive; font-size: 52px; color: #fff; text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35); text-align: center; padding: 20px; }
+      .info{
+        font-size: 25px;
+        font-family: "Stack Sans Headline", sans-serif;
+        color: #121212;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        margin: 10px;
+        padding: 10px;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+      }
+         .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 20px; padding: 5px 12px;
+      color: #ccc; font-size: 13px; cursor: default;
+    }
+    .user-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfa5, #00796b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 11px; font-weight: 700;
+    }
+
+    /* ── NOT LOGGED IN SCREEN ── */
+    .unauth-screen {
+      min-height: calc(100vh - 60px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .unauth-card {
+      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
+      padding: 40px 36px; max-width: 400px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .unauth-card h2 { color: #00bfa5; font-size: 22px; margin-bottom: 12px; }
+    .unauth-card p  { color: #666; font-size: 14px; margin-bottom: 24px; }
+
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="Fin.html"><img
+        src="interfacelabslogo.png"
+        class="logo"
+        alt="Interface Labs Logo"
+        width="30"
+      /></a>
+      <a href="create.html" class="navlinks">Create Element</a>
+      <a href="colorcontrast.html" class="navlinks">Color Palette</a>
+      <a href="#" class="navlinks">Font evaluate</a>
+      <a href="dragdrop.html" class="navlinks">Drag & Drop</a>
+      <div id="nav-user-chip"></div>
+<script>
+  const name = localStorage.getItem("name") || "";
+  const initials = name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase();
+  if (name) {
+    document.getElementById("nav-user-chip").innerHTML =
+      `<a href="profile.html" class="user-chip">
+         <div class="user-avatar">${initials}</div>
+         <span>${name}</span>
+       </a>`;
+  }
+</script>
+    </nav>
+
+    <section class="info">
+        <p>Select fonts to see which one you'd like. <br>Use the font color to see which color stands out on the backgrounds you've chosen.</p>
+    </section>
+
+    <div class="container">
+      <div class="left-panel">
+        <div class="controls">
+          <div class="color-manager">
+            <label>Edit Text:</label>
+            <input type="text" id="textInput" value="Sample Text" placeholder="Enter your text">
+          </div>
+          <div class="color-manager">
+            <label>Font:</label>
+            <select id="fontSelect">
+              <option value="'Playwrite NZ Guides', cursive">Playwrite NZ Guides</option>
+              <option value="'Stack Sans Headline', sans-serif">Stack Sans Headline</option>
+              <option value="'Arial', sans-serif">Arial</option>
+              <option value="'Times New Roman', serif">Times New Roman</option>
+              <option value="'Roboto', sans-serif">Roboto</option>
+              <option value="'Lobster', cursive">Lobster</option>
+              <option value="'Montserrat', sans-serif">Montserrat</option>
+              <option value="'Pacifico', cursive">Pacifico</option>
+              <option value="'Open Sans', sans-serif">Open Sans</option>
+              <option value="'Oswald', sans-serif">Oswald</option>
+              <option value="'Science Gothic', sans-serif">Science Gothic</option>
+            </select>
+          </div>
+          <div class="color-manager">
+            <label>Font Color:</label>
+            <input type="color" id="fontColorPicker" value="#ffffff">
+          </div>
+          <div id="colorControls"></div>
+        </div>
+        <button class="add-color-btn" id="addColorBtn">Add More Colors</button>
+      </div>
+
+      <div class="right-panel">
+        <div class="color-preview" id="colorPreview">
+          <div class="preview-text" id="previewText" contenteditable="true">Sample Text</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const fixedPalette = ["#6a994e", "#a7c957", "#f2e8cf", "#bc4749"];
+      let colors = [fixedPalette[0]]; 
+      const maxColors = 4;
+      const previewText = document.getElementById("previewText");
+
+      function updatePreview() {
+        const preview = document.getElementById("colorPreview");
+        if (colors.length === 1) {
+          preview.style.background = colors[0];
+        } else {
+          const percentage = 100 / colors.length;
+          const gradientStops = colors.map((color, index) => {
+            const start = index * percentage;
+            const end = (index + 1) * percentage;
+            return `${color} ${start}%, ${color} ${end}%`;
+          }).join(", ");
+          preview.style.background = `linear-gradient(to right, ${gradientStops})`;
+        }
+        previewText.style.color = document.getElementById("fontColorPicker").value;
+        previewText.style.fontFamily = document.getElementById("fontSelect").value;
+      }
+
+      function createColorManager(color, index) {
+        const manager = document.createElement("div");
+        manager.className = "color-manager";
+        manager.innerHTML = `
+          <label>Color ${index + 1}:</label>
+          <input type="color" value="${color}" data-index="${index}" class="color-picker">
+          <input type="text" value="${color}" data-index="${index}" class="color-input" maxlength="7">
+          ${colors.length > 1 ? `<button class="remove-btn" data-index="${index}">Remove</button>` : ""}
+        `;
+        return manager;
+      }
+
+      function renderControls() {
+        const container = document.getElementById("colorControls");
+        container.innerHTML = "";
+        colors.forEach((color, index) => container.appendChild(createColorManager(color, index)));
+        const addBtn = document.getElementById("addColorBtn");
+        addBtn.disabled = colors.length >= maxColors;
+        addBtn.textContent = colors.length >= maxColors ? "Maximum Colors Reached" : "Add More Colors";
+        attachEventListeners();
+        updatePreview();
+      }
+
+      function attachEventListeners() {
+        document.querySelectorAll(".color-picker").forEach(picker => {
+          picker.addEventListener("input", e => {
+            const index = parseInt(e.target.dataset.index);
+            colors[index] = e.target.value;
+            document.querySelector(`.color-input[data-index="${index}"]`).value = e.target.value;
+            updatePreview();
+          });
+        });
+        document.querySelectorAll(".color-input").forEach(input => {
+          input.addEventListener("input", e => {
+            const value = e.target.value;
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+              const index = parseInt(e.target.dataset.index);
+              colors[index] = value;
+              document.querySelector(`.color-picker[data-index="${index}"]`).value = value;
+              updatePreview();
+            }
+          });
+        });
+        document.querySelectorAll(".remove-btn").forEach(btn => {
+          btn.addEventListener("click", e => {
+            const index = parseInt(e.target.dataset.index);
+            colors.splice(index, 1);
+            renderControls();
+          });
+        });
+      }
+
+      document.getElementById("addColorBtn").addEventListener("click", () => {
+        if (colors.length < maxColors) {
+          colors.push(fixedPalette[colors.length]);
+          renderControls();
+          updatePreview();
+        }
+      });
+
+      document.getElementById("textInput").addEventListener("input", e => { previewText.textContent = e.target.value; });
+      document.getElementById("fontSelect").addEventListener("change", updatePreview);
+      document.getElementById("fontColorPicker").addEventListener("input", updatePreview);
+
+      renderControls();
+      updatePreview();
+    </script>
+  </body>
+</html>

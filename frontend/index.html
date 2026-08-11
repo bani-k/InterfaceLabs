@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login / Signup</title>
+<style>
+:root {
+    --bg: #b9c9c9;
+    --primary: #359397;
+    --dark: #111;
+    --card: #ffffff;
+    --accent: #6e8f88;
+    --text: #222;
+}
+
+.logo {
+    position: absolute;
+    top: 1px;
+    left: 20px;
+    width: 300px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url(background.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+/* Container */
+.container {
+    width: 350px;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    cursor: pointer;
+    background: #eee;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.tabs button.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* Forms */
+.form {
+    padding: 25px;
+    display: none;
+}
+
+.form.active {
+    display: block;
+}
+
+.form h2 {
+    margin-bottom: 20px;
+    color: var(--dark);
+}
+
+/* Inputs */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-group input:focus {
+    border-color: var(--primary);
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: var(--dark);
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--primary);
+}
+
+/* Small text */
+.switch-text {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.switch-text span {
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <img src="interfacelabs.png" alt="Interface Labs Logo" class="logo">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showForm('login')">Login</button>
+        <button class="tab-btn" onclick="showForm('signup')">Sign Up</button>
+    </div>
+
+    <!-- Login -->
+    <div id="login" class="form active">
+        <h2>Welcome Back</h2>
+        <div class="input-group">
+            <input id="loginUsername" type="text" placeholder="Username">
+        </div>
+        <div class="input-group">
+            <input id="loginPassword" type="password" placeholder="Password">
+        </div>
+        <button class="btn" onclick="login()">Login</button>
+        <div class="switch-text">
+            Don’t have an account? <span onclick="showForm('signup')">Sign up</span>
+        </div>
+    </div>
+
+    <!-- Signup -->
+    <div id="signup" class="form">
+        <h2>Create Account</h2>
+        <div class="input-group">
+            <input id="fullName" type="text" placeholder="Full Name">
+        </div>
+        <div class="input-group">
+            <input id="signupUsername" type="text" placeholder="Username">
+        </div>
+        <div class="input-group">
+            <input id="signupPassword" type="password" placeholder="Password">
+        </div>
+        <button class="btn" onclick="signup()">Sign Up</button>
+        <div class="switch-text">
+            Already have an account? <span onclick="showForm('login')">Login</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function showForm(form) {
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+    document.getElementById(form).classList.add('active');
+
+    if (form === 'login') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    }
+}
+
+async function signup() {
+    const fullName = document.getElementById("fullName").value;
+    const username = document.getElementById("signupUsername").value;
+    const password = document.getElementById("signupPassword").value;
+
+  const res = await fetch("http://localhost:5000/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ fullName, username, password }),
+  });
+
+  const data = await res.json();
+  alert(data.message);
+}
+
+async function login() {
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
+  const res = await fetch("http://localhost:5000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ username, password }),
+  });
+
+  const data = await res.json();
+
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("name", data.fullName);
+
+    alert("Login successful");
+
+    window.location.href = "Fin.html";
+  } else {
+    alert(data.message);
+  }
+}
+</script>
+</body>
+</html>

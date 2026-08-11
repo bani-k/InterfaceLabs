@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interface Labs</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap" rel="stylesheet" />
+    <!--use for color contrast-->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Guides&display=swap"
+      rel="stylesheet"
+    />
+    <!--Main nav font-->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Stack+Sans+Headline:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body,
+      html {
+        margin: 0px;
+        padding: 0px;
+        padding-top: 35px;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(45deg, #c6f9f9,#e0e2e3);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+      .user-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: #1e1e1e; border: 1px solid #2a2a2a;
+  border-radius: 20px; padding: 5px 12px;
+  color: #ccc; font-size: 13px; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-decoration: none;
+  font-family: "Stack Sans Headline", sans-serif;
+}
+.user-chip:hover { border-color: #00bfa5; background: #252525; }
+.user-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: linear-gradient(135deg, #00bfa5, #00796b);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 700;
+}
+      .navbar {
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-evenly;
+        background-color: #121212;
+        min-height: 60px;
+        box-shadow: 0 3px 12px rgba(20, 3, 3, 0.608);
+        min-width: 500px;
+        z-index: 999;
+      }
+      .navlinks{
+        padding: 8px 14px;
+        display: inline-block;
+        color: whitesmoke;
+        font-size: 20px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        transition: transform 0.25s ease;
+        text-shadow: 0.25s ease;
+        text-decoration: none;
+      }
+      .navlinks:hover {
+        font-size: larger;
+        transform: scale(1.3);
+        background: linear-gradient(135deg, #ccefff, #00bfa5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 5px rgba(163, 232, 253, 0.6),
+          0 0 8px rgba(72, 180, 207, 0.6);
+      }
+      .logo {
+        height: 80px;
+        width: auto;
+      }
+      .section1 {
+        margin: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+      }
+      .pinboard {
+        margin-bottom: 10px;
+        padding: 10px;
+        max-width: 100%; /* never exceed container */
+        width: 250px; /* default width on normal screens */
+        min-width: 250px; /* allows shrinking on small screens */
+        height: auto; /* maintain aspect ratio */
+        object-fit: contain; /* ensures the full image is visible */
+        flex: 1 1 auto; /* flexibly grows/shrinks */
+      }
+      .section2 {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .mainheading {
+        margin: 0;
+        padding: 20px;
+        padding-bottom: 10px;
+        font-size: clamp(30px, 8vw, 80px);
+        font-family: "Stack Sans Headline", sans-serif;
+        font-optical-sizing: auto;
+        font-style: bold;
+        text-align: center;
+        background: linear-gradient(90deg, #0a0000, #10b1c0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .sub1 {
+        background-color: #121212;
+        color: whitesmoke;
+        margin: 0;
+        padding: 5px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-optical-sizing: auto;
+        font-style: bold;
+        font-size: 40px;
+        text-align: center;
+      }
+      hr{
+        border: none;
+        border-top: 2px solid #121212; 
+        width: 100%;
+      }
+      .info-box{
+        background-color: teal;
+        color: whitesmoke;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 30px;
+        width: 80vw;      
+        padding: 2px;
+        opacity: 1; 
+        text-align: center;
+        line-height: 1.5;   
+        min-height:200px;      
+      }
+      .sub2{
+        padding-top: 0px;
+        margin-top: 0px;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 50px;
+        text-align: center;
+        color: #121212;
+        background: linear-gradient(to top,teal, #121212);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;          
+      }
+      .info-left {
+        margin-top: 20px;
+        width: 75vw;                /* box width */
+        margin-left: auto;           /* aligns to right */
+        margin-right: 0;             /* touches right side */
+        box-sizing: border-box;
+        background-color: #121212;
+        color: whitesmoke;
+        font-family: "Stack Sans Headline", sans-serif;
+        font-size: 30px;
+        padding: 10px;
+        opacity: 1;
+        text-align: center;
+        line-height: 1.5;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+      }
+
+      [data-aos="slide-left"] {
+        transform: translateX(100%);
+      }
+      .sliders{
+        overflow-x: hidden;
+      }
+      .site-footer{
+        background-color:#121212;
+        padding: 20px;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        margin-top: 2px;
+        display: flex;
+        font-family: "Stack Sans Headline", sans-serif;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .site-footer p{
+        font-size: 30px;
+        text-align: right;
+        color: whitesmoke;
+      }
+         .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: #1e1e1e; border: 1px solid #2a2a2a;
+      border-radius: 20px; padding: 5px 12px;
+      color: #ccc; font-size: 13px; cursor: default;
+    }
+    .user-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #00bfa5, #00796b);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 11px; font-weight: 700;
+    }
+
+    /* ── NOT LOGGED IN SCREEN ── */
+    .unauth-screen {
+      min-height: calc(100vh - 60px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .unauth-card {
+      background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
+      padding: 40px 36px; max-width: 400px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .unauth-card h2 { color: #00bfa5; font-size: 22px; margin-bottom: 12px; }
+    .unauth-card p  { color: #666; font-size: 14px; margin-bottom: 24px; }
+
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="Fin.html"><img
+        src="interfacelabslogo.png"
+        class="logo"
+        alt="Interface Labs Logo"
+        width="30"
+      /></a>
+      <a href="create.html" class="navlinks">Create Element</a>
+      <a href="colorcontrast.html" class="navlinks">Color Pallete</a>
+      <a href="typo.html" class="navlinks">Font evaluate</a>
+      <a href="dragdrop.html" class="navlinks">Drag & Drop</a>
+      <div id="nav-user-chip"></div>
+<script>
+  const name = localStorage.getItem("name") || "";
+  const initials = name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase();
+  if (name) {
+    document.getElementById("nav-user-chip").innerHTML =
+      `<a href="profile.html" class="user-chip">
+         <div class="user-avatar">${initials}</div>
+         <span>${name}</span>
+       </a>`;
+  }
+</script>
+    </nav>
+    <section class="section1">
+      <img src="pinboard.gif" class="pinboard" />
+      <section class="section2">
+        <p class="mainheading">Build your vision.</p>
+        <hr>
+        <p class="sub1">
+          Turn creativity into clarity.<br>Design. Iterate. Inspire.
+        </p>
+      </section>
+    </section>
+    <section class="sliders">
+    <p class="sub2">From Vision to Reality</p>
+      <div class="info-box" data-aos="slide-right" data-aos-delay="100">
+        <p>
+          Design - Drag & drop UI elements.<br>
+          Test - Check contrast, typography, accessibility.<br>
+          Export - Copy code.<br>
+        </p>
+      </div>
+      <div class="info-left" data-aos="slide-left" data-aos-delay="300">
+        <p>
+          A small moment to explore what works. Shift a few things, make a few choices, and let your design take a clearer form.
+        </p>
+      </div>
+    </section>
+    <section class="site-footer">
+        <img src="interfacelabslogo.png" alt="Interface Labs Logo" class="footer-logo" width="300px" height="auto">
+        <p>Made by Banipreet Kaur</p>
+    </section>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 1000,
+        easing: 'ease-out',
+      });
+    </script>
+  </body>
+</html>       
