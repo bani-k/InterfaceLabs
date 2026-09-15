@@ -258,13 +258,23 @@ app.post("/projects", auth, async (req, res) => {
 // QUERY search projects
 app.get("/projects/search", auth, async (req, res) => {
   const q = (req.query.q || "").trim();
+
   if (!q) return res.json([]);
+
   const results = await User.aggregate([
     { $match: { _id: new mongoose.Types.ObjectId(req.user.id) } },
     { $unwind: "$projects" },
-    { $match: { "projects.name": { $eq: q } } },
+    {
+      $match: {
+        "projects.name": {
+          $regex: q,
+          $options: "i",
+        },
+      },
+    },
     { $replaceRoot: { newRoot: "$projects" } },
   ]);
+
   res.json(results);
 });
 // QUERY updating project in projects array
